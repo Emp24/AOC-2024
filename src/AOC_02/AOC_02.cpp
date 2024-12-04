@@ -17,30 +17,30 @@ using namespace std;
 
 bool IsSafe(vector<int> numbers)
 {
-    bool isSafe = true;
+    // bool isSafe = true;
     bool isIncreasing = numbers[0] < numbers[1];
+
     for (int i = 0; i < numbers.size() - 1; i++)
     {
-        if (numbers[i] < numbers[i + 1] != isIncreasing)
+        int diff = abs(numbers[i] - numbers[i + 1]);
+
+        if (diff > 3 || diff < 1)
         {
-            std::cout << "Not safe" << endl;
             return false;
         }
 
-        int diff = abs(numbers[i] - numbers[i + 1]);
-        // cout << diff << endl;
-        if (diff <= 3 && diff > 0)
+        if (numbers[i] < numbers[i + 1] != isIncreasing)
         {
-            isSafe = true;
+            // std::cout << "Not safe" << endl;
+            return false;
         }
-        else
+        if (numbers[i] > numbers[i + 1] != !isIncreasing)
         {
-            isSafe = false;
-            return isSafe;
+            return false;
         }
     }
 
-    return isSafe;
+    return true;
 }
 
 int CountSafeSets(vector<vector<int>> set)
@@ -53,7 +53,22 @@ int CountSafeSets(vector<vector<int>> set)
             cout << "Set" + to_string(i) + " is safe" << endl;
             safeSets++;
         }
+        else
+        {
+            int n = set[i].size();
+            for (int j = 0; j < n; ++j)
+            {
+                vector<int> newNumbers = set[i];
+                newNumbers.erase(newNumbers.begin() + j);
+                if (IsSafe(newNumbers))
+                {
+                    safeSets++;
+                    break;
+                }
+            }
+        }
     }
+
     return safeSets;
 }
 int main()
